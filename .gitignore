@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+.DS_Store
+demo1
+demo2
+test
+.vscode/c_cpp_properties.json
+.vscode/settings.json
