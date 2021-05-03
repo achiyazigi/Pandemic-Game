@@ -3,10 +3,17 @@
 #include "City.hpp"
 #include "Color.hpp"
 #include <iostream>
+#include <vector>
+#include <unordered_set>
 namespace pandemic{
     class Player{
+    protected:
+        Board& b;
+        City location;
+        std::unordered_set<City> _holds;
+        std::vector<City> get_all_cards_colored(Color);
     public:
-        Player(Board, City);
+        Player(Board&, City);
         Player& take_card(City);
         Player& drive(City);
         Player& fly_direct(City);

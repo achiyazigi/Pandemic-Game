@@ -36,3 +36,6 @@ demo2
 test
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+.vscode/launch.json
+.gitignore
+.vscode/tasks.json

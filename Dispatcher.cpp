@@ -7,7 +7,7 @@
 using namespace std;
 using namespace pandemic;
 
-Dispatcher& Dispatcher::fly_direct(Color){
+Dispatcher& Dispatcher::fly_direct(City c){
     return *this;
 }
 // const string& GeneSplicer::role() const{

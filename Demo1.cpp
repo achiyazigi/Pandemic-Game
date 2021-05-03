@@ -26,12 +26,12 @@ int main() {
 	board[City::Chicago] = 1;       // put 1 blue disease cube in Chicago
 
 	OperationsExpert player {board, City::Atlanta};  // initialize an "operations expert" player on the given board, in Atlanta.
+
 	player.take_card(City::Johannesburg)
 	 .take_card(City::Khartoum)
 	 .take_card(City::SaoPaulo)
 	 .take_card(City::BuenosAires)
 	 .take_card(City::HoChiMinhCity);
-
 
 	/* build action */
 

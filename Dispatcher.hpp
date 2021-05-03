@@ -7,8 +7,8 @@
 namespace pandemic{
     class Dispatcher: public Player{
     public:
-        Dispatcher(Board b, City c):Player(b, c){} 
-        Dispatcher& fly_direct(Color);
+        Dispatcher(Board& b, City c):Player(b, c){} 
+        Dispatcher& fly_direct(City);
         const std::string role() const{
             return "Dispatcher";
         }
