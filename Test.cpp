@@ -163,7 +163,7 @@ TEST_CASE("Initialization"){
                    .take_card(Beijing) // Red
                    .take_card(Bogota) // Yellow
                    .take_card(Delhi); // Black
-        CHECK_NOTHROW(geneSplicer.discover_cure();); // geneSplicer can cure with different color cards
+        CHECK_NOTHROW(geneSplicer.discover_cure(Black);); // geneSplicer can cure with different color cards
 
         CHECK_EQ(board[Madrid], 1);
         CHECK_NOTHROW(fieldDoctor.treat(Madrid);); // fieldDoctor can treat neighbor city disease
@@ -368,16 +368,48 @@ TEST_CASE("Basic player functionality"){
 
         m.take_card(Riyadh).fly_direct(Riyadh);
         CHECK_EQ(board[Riyadh], 8); // no Black cure found...
+        board[Riyadh] = 0;
 
     }
     SUBCASE("Virologist Functionality"){
+        board[Beijing] = 1;
+        board[NewYork] = 1;
+        Virologist v{board, NewYork};
+        CHECK_EQ(board[NewYork], 1);
+        CHECK_NOTHROW(v.treat(NewYork);); // regular treat
+        CHECK_EQ(board[NewYork], 0);
+        CHECK_THROWS(v.treat(Beijing);); // not holding Beijing card yet
+        v.take_card(Beijing);
+        CHECK_EQ(board[Beijing], 1);
+        CHECK_NOTHROW(v.treat(Beijing);); // virologist can treat from distance
+        CHECK_EQ(board[Beijing], 0);
 
     }
     SUBCASE("GeneSplicer Functionality"){
-
+        GeneSplicer g{board, Kolkata};
+        // genesplicer takes mixed 6 cards
+        g.take_card(Paris)
+         .take_card(Kolkata)
+         .take_card(Taipei)
+         .take_card(Tokyo)
+         .take_card(Tehran)
+         .take_card(Jakarta);
+        g.build(); // throws 1 card, builds station in Kolkata!
+        CHECK_NOTHROW(g.discover_cure(Yellow);); // can discover cure with 5 mixed colored cards
+        CHECK_THROWS(g.discover_cure(Black);); // already threw her cards...
     }
     SUBCASE("FieldDoctor Functionality"){
-
+        board[Paris] = 1;
+        board[Milan] = 1;
+        board[Algiers] = 1;
+        board[Istanbul] = 1;
+        FieldDoctor f{board, Paris};
+        CHECK_NOTHROW(f.treat(Paris);); // simple treat
+        CHECK_NOTHROW(f.treat(Milan);); // neighbor treat
+        CHECK_NOTHROW(f.treat(Algiers);); // neighbor treat
+        CHECK_THROWS(f.treat(Istanbul);); // not neighbors
+        CHECK_NOTHROW(f.drive(Algiers).treat(Istanbul);); // neighbor treat
+        CHECK_EQ(board[Paris] + board[Milan] + board[Algiers] + board[Istanbul], 0); // all disease treated
     }
 }
 
