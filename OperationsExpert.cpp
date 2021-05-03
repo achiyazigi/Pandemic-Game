@@ -8,9 +8,8 @@ using namespace std;
 using namespace pandemic;
 
 OperationsExpert& OperationsExpert::build(){
-    _holds.erase(location);
     if(!b.add_station(location)){
-        throw invalid_argument("not valid");
+        throw invalid_argument("there is a station here already");
     }
     return *this;
 }

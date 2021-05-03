@@ -15,13 +15,13 @@ namespace pandemic{
     public:
         Player(Board&, City);
         Player& take_card(City);
-        Player& drive(City);
-        Player& fly_direct(City);
-        Player& fly_charter(City);
-        Player& fly_shuttle(City);
-        Player& discover_cure(Color);
-        Player& build();
-        Player& treat(City);
+        virtual Player& drive(City);
+        virtual Player& fly_direct(City);
+        virtual Player& fly_charter(City);
+        virtual Player& fly_shuttle(City);
+        virtual Player& discover_cure(Color);
+        virtual Player& build();
+        virtual Player& treat(City);
         virtual const std::string role() const{
             return "Player";
         }

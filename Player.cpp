@@ -61,7 +61,7 @@ Player& Player::discover_cure(Color disease){
             b.cure_found(disease);
         }
         else{
-        throw invalid_argument("Player doesn't hold 5 cards from this color");
+            throw invalid_argument("Player doesn't hold 5 cards from this color");
         }
     }
     else{

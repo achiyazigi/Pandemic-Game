@@ -18,7 +18,7 @@ Researcher& Researcher::discover_cure(Color disease){
         b.cure_found(disease);
     }
     else{
-        throw new exception{};
+        throw invalid_argument("Player doesn't hold 5 cards from this color");
     }
     
     return *this;

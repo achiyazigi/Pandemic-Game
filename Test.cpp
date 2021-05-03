@@ -151,6 +151,8 @@ TEST_CASE("Initialization"){
         CHECK_NOTHROW(medic.treat(StPetersburg);); // medic treats completly
         CHECK_EQ(board[StPetersburg], 0);
 
+        // virologist takes the Washington card
+        virologist.take_card(Washington);
         CHECK_EQ(board[Washington], 1);
         CHECK_NOTHROW(virologist.treat(Washington)); // virologist can treat from distance
         CHECK_EQ(board[Washington], 0);
@@ -254,8 +256,16 @@ TEST_CASE("Basic player functionality"){
 
         // fly_shuttle
         CHECK_THROWS(player.fly_shuttle(Delhi);); // no station in this city
-        player.build().fly_direct(Delhi).build(); // player builds in 2 citys (Algiers, Delhi)
+        player.take_card(Algiers); // player takes back this card
+        player.build() // throws Algiers card
+              .fly_direct(Delhi)
+              .take_card(Delhi)
+              .build() // player builds in 2 citys (Algiers, Delhi)
+              .take_card(Algiers) // player takes back this card
+              .take_card(Delhi); // player takes back this card
+        
         CHECK_NOTHROW(player.fly_shuttle(Algiers);); // player fly_shuttle to Algiers
+        player.take_card(Algiers); // player takes back this card
         CHECK_NOTHROW(player.fly_shuttle(Delhi).fly_shuttle(Algiers);); // player fly_shuttle to Delhi and back
     }
 
@@ -280,8 +290,10 @@ TEST_CASE("Basic player functionality"){
         CHECK_NOTHROW(player.treat(Algiers);); // remove all disease level 5 to 0
         CHECK_EQ(board[Algiers], 0);
 
-        CHECK_NOTHROW(player.drive(Cairo).treat(Cairo).treat(Cairo);); // moving to neighbor city and treating twice
-        CHECK_EQ(board[Cairo], 0);
+        CHECK_EQ(board[Cairo], 2);
+        CHECK_NOTHROW(player.drive(Cairo).treat(Cairo)); // moving to neighbor city and treating only once!
+        CHECK_THROWS(player.treat(Cairo);); // see reason next line
+        CHECK_EQ(board[Cairo], 0); // cure to black disease has been found earlier so a single treat removes the disease!
         CHECK_THROWS(player.treat(Cairo);); // can't treat a healthy city
 
         CHECK_EQ(board[Paris], 3);
@@ -290,18 +302,72 @@ TEST_CASE("Basic player functionality"){
     }
 
     SUBCASE("OperationExpert Functionality"){
-        
+        OperationsExpert oe{board, Milan};
+        CHECK_NOTHROW(oe.build();); // can build without throwing card.
     }
     SUBCASE("Dispatcher Functionality"){
+        Dispatcher d{board, Essen};
+        CHECK_THROWS(d.fly_direct(Madrid);); // no station in Essen yet
+        d.take_card(Essen).build();
+        CHECK_NOTHROW(d.fly_direct(Madrid););
 
     }
     SUBCASE("Scientist Functionality"){
+        board[Manila] = 3;
+        Scientist s{board, Manila, 2};
+        s.take_card(HongKong).take_card(Jakarta); // takes 2 red cards
 
+        CHECK_THROWS(s.discover_cure(Red);); // no station yet
+        s.take_card(Manila).build(); // builds station in Manila
+        CHECK_NOTHROW(s.discover_cure(Red);); // can discover with 2 cards
+        CHECK_EQ(board[Manila], 3);
+        s.treat(Manila);
+        CHECK_EQ(board[Manila], 0);
     }
     SUBCASE("Researcher Functionality"){
+        Researcher r{board, Moscow};
+
+        // researcher takes 6 cards (Black):
+        r.take_card(Algiers)
+            .take_card(Baghdad)
+            .take_card(Cairo)
+            .take_card(Chennai)
+            .take_card(Delhi)
+            .take_card(Istanbul);
+        CHECK_NOTHROW(r.discover_cure(Black);); // can discover without station
 
     }
     SUBCASE("Medic Functionality"){
+        board.remove_cure(); // resets cures found
+        board[Lima] = 2; // Yellow
+        board[Lagos] = 2; // Yellow
+        board[Santiago] = 2; // Yellow
+        board[Riyadh] = 8; // Black
+
+        Medic m{board, Lima};
+        // medic takes 6 yellow cards
+        m.take_card(Lima)
+         .take_card(Lagos)
+         .take_card(Santiago)
+         .take_card(SaoPaulo)
+         .take_card(Kinshasa)
+         .take_card(Khartoum);
+        m.build(); // throws Lima card
+        CHECK_EQ(board[Lima], 2);
+        m.treat(Lima);
+        CHECK_EQ(board[Lima], 0); // medic treats well!
+        m.discover_cure(Yellow); // throws 5 yellow cards
+        CHECK_EQ(board[Santiago], 2); 
+        m.drive(Santiago);
+        CHECK_EQ(board[Santiago], 0); // no need to treat, Yellow cure found!
+
+        m.take_card(Lagos); // takes Lagos card again
+        CHECK_EQ(board[Lagos], 2); 
+        m.fly_direct(Lagos);
+        CHECK_EQ(board[Lagos], 0); // no need to treat, Yellow cure found!
+
+        m.take_card(Riyadh).fly_direct(Riyadh);
+        CHECK_EQ(board[Riyadh], 8); // no Black cure found...
 
     }
     SUBCASE("Virologist Functionality"){
