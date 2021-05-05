@@ -338,7 +338,7 @@ TEST_CASE("Basic player functionality"){
 
     }
     SUBCASE("Medic Functionality"){
-        board.remove_cure(); // resets cures found
+        board.remove_cures(); // resets cures found
         board[Lima] = 2; // Yellow
         board[Lagos] = 2; // Yellow
         board[Santiago] = 2; // Yellow

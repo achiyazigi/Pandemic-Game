@@ -13,6 +13,4 @@ OperationsExpert& OperationsExpert::build(){
     }
     return *this;
 }
-// const string& OperationsExpert::role() const{
 
-// }

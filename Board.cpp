@@ -151,7 +151,7 @@ const bool Board::is_clean(){
     return true;
 }
 
-void Board::remove_cure(){
+void Board::remove_cures(){
     for(size_t i = 0; i < 4; i++){
         _cure_found[i] = false;
     }

@@ -23,6 +23,3 @@ FieldDoctor& FieldDoctor::treat(City to_treat){
     }
     return *this;
 }
-// const string& GeneSplicer::role() const{
-
-// }

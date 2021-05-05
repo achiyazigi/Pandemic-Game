@@ -27,6 +27,3 @@ GeneSplicer& GeneSplicer::discover_cure(Color disease){
     }
     return *this;
 }
-// const string& GeneSplicer::role() const{
-
-// }

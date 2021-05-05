@@ -27,6 +27,3 @@ Scientist& Scientist::discover_cure(Color disease){
     }
     return *this;
 }
-// const string& Virologist::role() const{
-
-// }

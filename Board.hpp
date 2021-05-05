@@ -50,7 +50,7 @@ namespace pandemic{
         int& operator[](City c);
         // const int operator[](City c) const;
         const bool is_clean();
-        void remove_cure(); // removes all disease discoveries, only for tests.
+        void remove_cures(); // removes all disease discoveries, only for tests.
         friend std::ostream& operator<<(std::ostream&, const Board&);
     };
 }
