@@ -24,7 +24,7 @@ using namespace std;
 class generic_player: public Player{
     public:
         generic_player(Board& b, City c):Player(b,c){}
-        const string role() const override{
+        const string role() const {
             return "Player";
         }
 };
