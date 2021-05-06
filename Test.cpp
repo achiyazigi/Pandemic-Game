@@ -20,15 +20,6 @@ using namespace pandemic;
 #include <stdexcept>
 using namespace std;
 
-
-class generic_player: public Player{
-    public:
-        generic_player(Board& b, City c):Player(b,c){}
-        const string role() const {
-            return "Player";
-        }
-};
-
 TEST_CASE("Initialization"){
     SUBCASE("Board"){
 
@@ -42,11 +33,11 @@ TEST_CASE("Initialization"){
     Board board;
 
     SUBCASE("Player"){
-        CHECK_NOTHROW(generic_player p(board,City::Algiers););
+        CHECK_NOTHROW(OperationsExpert p(board,City::Algiers););
     }
 
-    //  defining new generic player
-    generic_player player{board,City::Algiers};
+    //  defining new arbitrary player
+    OperationsExpert player{board,City::Algiers};
 
     SUBCASE("Board Setup: Existance of all citys and operator[] well defined"){
         board[City::Algiers] = 1;
@@ -177,38 +168,12 @@ TEST_CASE("Initialization"){
         CHECK_EQ(board[City::Madrid], 0);
     
     }
-    // defining array of players:
-    Player *players[] = {&dispatcher,
-                         &fieldDoctor,
-                         &operationsExpert,
-                         &scientist,
-                         &researcher,
-                         &medic,
-                         &virologist,
-                         &geneSplicer};
 
-    SUBCASE("Check if role() can be called on &Player"){
-        string last_role = "";
-        for(auto& p: players){
-            CHECK_NE(p->role(), last_role);
-            // cout << p->role() << endl;
-            /*  ^ should print (Example):
-                            Dispatcher
-                            FieldDoctor
-                            OperationsExpert
-                            Scientist
-                            Researcher
-                            Medic
-                            Virologist
-                            GeneSplicer */
-            last_role = p->role();
-        }
-    }
 }
 TEST_CASE("Basic player functionality"){
     Board board;
     CHECK(board.is_clean()); // new board
-    generic_player player{board, City::Algiers};
+    OperationsExpert player{board, City::Algiers};
 
 
     // player takes 5 cards (Color::Black):
@@ -281,30 +246,31 @@ TEST_CASE("Basic player functionality"){
         board[City::Paris] = 3;
         board[City::Cairo] = 2;
 
+        Dispatcher d{board, City::Algiers};
         // player takes 6 cards (Color::Black):
-        player.take_card(City::Algiers)
+        d.take_card(City::Algiers)
             .take_card(City::Baghdad)
             .take_card(City::Cairo)
             .take_card(City::Chennai)
             .take_card(City::Delhi)
             .take_card(City::Istanbul);
 
-        CHECK_THROWS(player.discover_cure(Color::Black);); // there is no station in Algiers yet
-        CHECK_NOTHROW(player.build();); // builds station in Algiers, throw Algiers card
+        CHECK_THROWS(d.discover_cure(Color::Black);); // there is no station in Algiers yet
+        CHECK_NOTHROW(d.build();); // builds station in Algiers, throw Algiers card
 
         CHECK_EQ(board[City::Algiers], 5);
-        CHECK_NOTHROW(player.discover_cure(Color::Black);); // player throws 5 Color::Black cards
-        CHECK_NOTHROW(player.treat(City::Algiers);); // remove all disease level 5 to 0
+        CHECK_NOTHROW(d.discover_cure(Color::Black);); // player throws 5 Color::Black cards
+        CHECK_NOTHROW(d.treat(City::Algiers);); // remove all disease level 5 to 0
         CHECK_EQ(board[City::Algiers], 0);
 
         CHECK_EQ(board[City::Cairo], 2);
-        CHECK_NOTHROW(player.drive(City::Cairo).treat(City::Cairo)); // moving to neighbor city and treating only once!
-        CHECK_THROWS(player.treat(City::Cairo);); // see reason next line
+        CHECK_NOTHROW(d.drive(City::Cairo).treat(City::Cairo)); // moving to neighbor city and treating only once!
+        CHECK_THROWS(d.treat(City::Cairo);); // see reason next line
         CHECK_EQ(board[City::Cairo], 0); // cure to Color::Black disease has been found earlier so a single treat removes the disease!
-        CHECK_THROWS(player.treat(City::Cairo);); // can't treat a healthy city
+        CHECK_THROWS(d.treat(City::Cairo);); // can't treat a healthy city
 
         CHECK_EQ(board[City::Paris], 3);
-        CHECK_NOTHROW(player.drive(City::Algiers).drive(City::Paris).treat(City::Paris);); // navigating to paris through Algiers and treating
+        CHECK_NOTHROW(d.drive(City::Algiers).drive(City::Paris).treat(City::Paris);); // navigating to paris through Algiers and treating
         CHECK_EQ(board[City::Paris], 2);
     }
 
