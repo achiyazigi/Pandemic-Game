@@ -21,6 +21,13 @@ using namespace pandemic;
 using namespace std;
 
 
+class generic_player: public Player{
+    public:
+        generic_player(Board& b, City c):Player(b,c){}
+        const string role() const override{
+            return "Player";
+        }
+};
 
 TEST_CASE("Initialization"){
     SUBCASE("Board"){
@@ -35,11 +42,11 @@ TEST_CASE("Initialization"){
     Board board;
 
     SUBCASE("Player"){
-        CHECK_NOTHROW(Player p(board,City::Algiers););
+        CHECK_NOTHROW(generic_player p(board,City::Algiers););
     }
 
     //  defining new generic player
-    Player player{board,City::Algiers};
+    generic_player player{board,City::Algiers};
 
     SUBCASE("Board Setup: Existance of all citys and operator[] well defined"){
         board[City::Algiers] = 1;
@@ -201,7 +208,7 @@ TEST_CASE("Initialization"){
 TEST_CASE("Basic player functionality"){
     Board board;
     CHECK(board.is_clean()); // new board
-    Player player{board, City::Algiers};
+    generic_player player{board, City::Algiers};
 
 
     // player takes 5 cards (Color::Black):
