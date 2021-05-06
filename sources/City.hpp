@@ -1,7 +1,7 @@
 #pragma once
 namespace pandemic{
 
-    enum City{
+    enum class City{
         Algiers,
         Atlanta,
         Baghdad,
@@ -51,5 +51,4 @@ namespace pandemic{
         Tokyo,
         Washington
     };
-    
 }

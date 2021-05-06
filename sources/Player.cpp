@@ -52,6 +52,9 @@ Player& Player::fly_shuttle(City to_fly_shuttle){
     return *this;
 }
 Player& Player::discover_cure(Color disease){
+    if(b.is_cure_found(disease)){
+        return *this;
+    }
     if(b.has_station(location)){
         vector<City> to_throw = get_all_cards_colored(disease);
         if(to_throw.size() >= 5){
@@ -72,9 +75,10 @@ Player& Player::discover_cure(Color disease){
 Player& Player::build(){
     if(_holds.contains(location)){
         _holds.erase(location);
-        if(!b.add_station(location)){
-            throw invalid_argument("there is already a station here");
-        }
+        b.add_station(location);
+        // if(!b.add_station(location)){
+        //     throw invalid_argument("there is already a station here");
+        // }
     }
     else{
         throw invalid_argument("Player doesn't hold his location city card");

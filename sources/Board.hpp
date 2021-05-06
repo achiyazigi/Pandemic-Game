@@ -40,11 +40,11 @@ namespace pandemic{
             return citys_colors[c];
         }
 
-        bool is_cure_found(Color disease){
-            return _cure_found[disease];
+        bool is_cure_found(Color disease) const{
+            return _cure_found[(int)disease];
         }
         void cure_found(Color disease){
-            _cure_found[disease] = true;
+            _cure_found[(int)disease] = true;
         }
 
         int& operator[](City c);
