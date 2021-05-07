@@ -139,7 +139,8 @@ TEST_CASE("Initialization"){
                   .take_card(City::London)
                   .take_card(City::Madrid);
         CHECK_EQ(board[City::StPetersburg], 2);
-        CHECK_NOTHROW(researcher.discover_cure(Color::Blue).treat(City::StPetersburg);); // researcher can discover even though there is no station
+        CHECK_NOTHROW(researcher.discover_cure(Color::Blue););// researcher can discover even though there is no station
+        CHECK_NOTHROW(researcher.treat(City::StPetersburg);); 
         CHECK_EQ(board[City::StPetersburg], 0);
 
         // define disease level:
@@ -229,11 +230,11 @@ TEST_CASE("Basic player functionality"){
         // fly_shuttle
         CHECK_THROWS(player.fly_shuttle(City::Delhi);); // no station in this city
         player.take_card(City::Algiers); // player takes back this card
-        player.build() // throws Algiers card
-              .fly_direct(City::Delhi)
+        player.build(); // throws Algiers card
+        player.fly_direct(City::Delhi)
               .take_card(City::Delhi)
-              .build() // player builds in 2 citys (Algiers, Delhi)
-              .take_card(City::Algiers) // player takes back this card
+              .build(); // player builds in 2 citys (Algiers, Delhi)
+        player.take_card(City::Algiers) // player takes back this card
               .take_card(City::Delhi); // player takes back this card
         
         CHECK_NOTHROW(player.fly_shuttle(City::Algiers);); // player fly_shuttle to Algiers
@@ -463,8 +464,8 @@ TEST_CASE("Game Simulation"){
                                  .take_card(City::Essen)
                                  .drive(City::Lima)
                                  .drive(City::Bogota)
-                                 .build() // not throwing any card, station in Bogota!
-                                 .treat(City::Bogota); // throws 1 card
+                                 .build(); // not throwing any card, station in Bogota!
+                 operationsExpert.treat(City::Bogota); // throws 1 card
         );
         CHECK_EQ(board[City::Bogota], 1);
     
@@ -525,8 +526,8 @@ TEST_CASE("Game Simulation"){
                     .take_card(City::Madrid) 
                     .take_card(City::Manila) 
                     .fly_direct(City::Madrid) // doesn't throw card! station in Baghdad!
-                    .build() // throws 1 card, station in Madrid!
-                    .drive(City::NewYork)
+                    .build(); // throws 1 card, station in Madrid!
+            dispatcher.drive(City::NewYork)
                     .drive(City::Washington);
         );
 
@@ -565,6 +566,6 @@ TEST_CASE("Game Simulation"){
         );
         CHECK_EQ(board[City::BuenosAires], 0);
     
-    // all diseases have been cuColor::Red!
+    // all diseases have been cured!
     CHECK(board.is_clean());
 }
