@@ -8,6 +8,6 @@ namespace pandemic{
     public:
         Virologist(Board& b, City c): Player(b,c){}
         Virologist& treat(City);
-        const std::string role() const;
+        std::string role() const;
     };
 }

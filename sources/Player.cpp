@@ -23,6 +23,10 @@ Player& Player::drive(City to_drive){
     return *this;
 }
 Player& Player::fly_direct(City to_fly_direct){
+    if(location == to_fly_direct){
+        throw invalid_argument("can't fly from city to itself");
+
+    }
     if(_holds.contains(to_fly_direct)){
         _holds.erase(to_fly_direct);
         location = to_fly_direct;
@@ -33,6 +37,10 @@ Player& Player::fly_direct(City to_fly_direct){
     return *this;
 }
 Player& Player::fly_charter(City to_fly_charter){
+    if(location == to_fly_charter){
+        throw invalid_argument("can't fly from city to itself");
+
+    }
     if(_holds.contains(location)){
         _holds.erase(location);
         location = to_fly_charter;
@@ -43,6 +51,10 @@ Player& Player::fly_charter(City to_fly_charter){
     return *this;
 }
 Player& Player::fly_shuttle(City to_fly_shuttle){
+    if(location == to_fly_shuttle){
+        throw invalid_argument("can't fly from city to itself");
+
+    }
     if(b.has_station(location) && b.has_station(to_fly_shuttle)){
         location = to_fly_shuttle;
     }
@@ -57,8 +69,8 @@ Player& Player::discover_cure(Color disease){
     }
     if(b.has_station(location)){
         vector<City> to_throw = get_all_cards_colored(disease);
-        if(to_throw.size() >= 5){
-            for(size_t i = 0; i < 5; i++){
+        if(to_throw.size() >= CARDS_TO_DISCOVER_CURE){
+            for(size_t i = 0; i < CARDS_TO_DISCOVER_CURE; i++){
                 _holds.erase(to_throw.at(i));
             }
             b.cure_found(disease);

@@ -8,7 +8,7 @@ namespace pandemic{
     public:
         GeneSplicer(Board& b, City c):Player(b, c){} 
         GeneSplicer& discover_cure(Color disease);
-        const std::string role() const{
+        std::string role() const{
             return "GeneSplicer";
         }
     };

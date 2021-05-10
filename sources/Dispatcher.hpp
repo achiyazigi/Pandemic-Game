@@ -9,7 +9,7 @@ namespace pandemic{
     public:
         Dispatcher(Board& b, City c):Player(b, c){} 
         Dispatcher& fly_direct(City);
-        const std::string role() const{
+        std::string role() const{
             return "Dispatcher";
         }
     };

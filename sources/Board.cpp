@@ -4,17 +4,16 @@
 using namespace std;
 using namespace pandemic;
 
-
 /**
  * @brief Construct a new Board:: Board object
  * 
  */
-Board::Board(){
+Board::Board():_cure_found{false}{
     for(int c = (int)City::Algiers; c<= (int)City::Washington; c++){
         disease_level[(City)c] = 0;
     }
     for(size_t i = 0; i < 4; i++){
-        _cure_found[i] = false;
+        _cure_found.at(i) = false;
     }
     City city;
     for(size_t i = (int)City::Algiers; i <= (int)City::Washington; i++){
@@ -48,7 +47,7 @@ Board::Board(){
     _neighbors[City::London].insert({City::NewYork, City::Madrid, City::Essen, City::Paris});
     _neighbors[City::LosAngeles].insert({City::SanFrancisco, City::Chicago, City::MexicoCity, City::Sydney});
     _neighbors[City::Madrid].insert({City::London, City::NewYork, City::Paris, City::SaoPaulo, City::Algiers});
-    _neighbors[City::Manila].insert({City::Taipei, City::SanFrancisco, City::HoChiMinhCity, City::Sydney});
+    _neighbors[City::Manila].insert({City::HongKong, City::Taipei, City::SanFrancisco, City::HoChiMinhCity, City::Sydney});
     _neighbors[City::MexicoCity].insert({City::LosAngeles, City::Chicago, City::Miami, City::Lima, City::Bogota});
     _neighbors[City::Miami].insert({City::Atlanta, City::MexicoCity, City::Washington, City::Bogota});
     _neighbors[City::Milan].insert({City::Essen, City::Paris, City::Istanbul});
@@ -142,9 +141,9 @@ int& Board::operator[](City c){
 //     return disease_level.at(c);
 // }
 
-const bool Board::is_clean(){
+bool Board::is_clean(){
     for(auto& city: this->disease_level){
-        if(city.second){
+        if(city.second > 0){
             return false;
         }
     }
@@ -153,7 +152,7 @@ const bool Board::is_clean(){
 
 void Board::remove_cures(){
     for(size_t i = 0; i < 4; i++){
-        _cure_found[i] = false;
+        _cure_found.at(i) = false;
     }
 }
 
@@ -166,7 +165,7 @@ void Board::remove_cures(){
  */
 ostream& pandemic::operator<<(ostream& os, const Board& b){
     os << "disease levels: " << endl;
-    for(auto& city: b.disease_level){
+    for(const auto& city: b.disease_level){
         os << '(' << (int)city.first << ',' << (int)city.second << ')';
     }
     os<<endl;

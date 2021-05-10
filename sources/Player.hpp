@@ -22,6 +22,6 @@ namespace pandemic{
         virtual Player& discover_cure(Color);
         virtual Player& build();
         virtual Player& treat(City);
-        virtual const std::string role() const = 0;
+        virtual std::string role() const = 0;
     };
 }

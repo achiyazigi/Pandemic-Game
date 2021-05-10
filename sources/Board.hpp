@@ -4,8 +4,10 @@
 #include "Color.hpp"
 #include <unordered_map>
 #include <unordered_set>
+#include <array>
 
 namespace pandemic{
+    const int CARDS_TO_DISCOVER_CURE = 5;
     
     class Board{
     private:
@@ -14,7 +16,7 @@ namespace pandemic{
         std::unordered_map<City,bool> stations;
         std::unordered_map<City,std::unordered_set<City>> _neighbors;
         std::unordered_set<int> _cards;
-        bool _cure_found[4];
+        std::array<bool, 4> _cure_found;
 
     public:
         Board();
@@ -41,15 +43,15 @@ namespace pandemic{
         }
 
         bool is_cure_found(Color disease) const{
-            return _cure_found[(int)disease];
+            return _cure_found.at((uint)disease);
         }
         void cure_found(Color disease){
-            _cure_found[(int)disease] = true;
+            _cure_found.at((uint)disease) = true;
         }
 
         int& operator[](City c);
         // const int operator[](City c) const;
-        const bool is_clean();
+        bool is_clean();
         void remove_cures(); // removes all disease discoveries, only for tests.
         friend std::ostream& operator<<(std::ostream&, const Board&);
     };

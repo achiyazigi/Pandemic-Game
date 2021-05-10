@@ -11,8 +11,8 @@ using namespace pandemic;
 Researcher& Researcher::discover_cure(Color disease){
     
     vector<City> to_throw = get_all_cards_colored(disease);
-    if(to_throw.size() >= 5){
-        for(size_t i = 0; i < 5; i++){
+    if(to_throw.size() >= CARDS_TO_DISCOVER_CURE){
+        for(size_t i = 0; i < CARDS_TO_DISCOVER_CURE; i++){
             _holds.erase(to_throw.at(i));
         }
         b.cure_found(disease);

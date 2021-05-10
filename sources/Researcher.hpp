@@ -9,7 +9,7 @@ namespace pandemic{
     public:
         Researcher(Board& b, City c):Player(b, c){} 
         Researcher& discover_cure(Color);
-        const std::string role() const{
+        std::string role() const{
             return "Researcher";
         }
     };

@@ -11,7 +11,7 @@ namespace pandemic{
     public:
         Scientist(Board& b, City c, int cards):Player(b,c), _cards_to_discover_cure(cards){}  
         Scientist& discover_cure(Color);
-        const std::string role() const{
+        std::string role() const{
             return "Scientist";
         }
     };

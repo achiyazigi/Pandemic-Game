@@ -14,7 +14,7 @@ namespace pandemic{
         Medic& fly_charter(City);
         Medic& fly_shuttle(City);
         Medic& treat(City);
-        const std::string role() const{
+        std::string role() const{
             return "Medic";
         }
     };

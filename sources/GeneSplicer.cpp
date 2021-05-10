@@ -9,10 +9,10 @@ using namespace pandemic;
 
 GeneSplicer& GeneSplicer::discover_cure(Color disease){
     if(b.has_station(location)){
-        if(_holds.size() >= 5){
+        if(_holds.size() >= CARDS_TO_DISCOVER_CURE){
             int count = 0;
-            for(auto& card : _holds){
-                if(count++ < 5){
+            for(const auto& card : _holds){
+                if(count++ < CARDS_TO_DISCOVER_CURE){
                     _holds.erase(card);
                 }
             }
